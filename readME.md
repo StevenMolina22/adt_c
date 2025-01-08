@@ -177,7 +177,7 @@ Las operaciones básicas que se pueden realizar sobre una lista son:
   - **Destruir**: O(n).
   - **Destruir todo**: O(n * f(n)).
 
-## TDA ABB (Árbol Binario de Búsqueda)
+## TDA ABB
 
 ### Para compilar:
 
