@@ -67,13 +67,13 @@ struct pokemon *leer_pokemon(struct archivo_csv *archivo)
 	return pokemon;
 }
 
-bool agregar_pokemones(struct archivo_csv *archivo, Lista *pokedex)
+bool agregar_pokemones(struct archivo_csv *archivo, List *pokedex)
 {
 	struct pokemon *pokemon;
 
 	// Lee cada Pokémon y lo agrega a la lista
 	while ((pokemon = leer_pokemon(archivo)) != NULL) {
-		if (!lista_agregar_al_final(pokedex, pokemon)) {
+		if (!list_append(pokedex, pokemon)) {
 			liberar_pokemon(
 				pokemon); // Libera si no se puede agregar
 			return false;
@@ -84,7 +84,7 @@ bool agregar_pokemones(struct archivo_csv *archivo, Lista *pokedex)
 }
 
 // ----- Pokemon input usuario -----
-void buscar_pokemon(Lista *pokedex)
+void buscar_pokemon(List *pokedex)
 {
 	char nombre[100];
 	printf("Ingresar nombre del pokemon: ");
@@ -94,7 +94,7 @@ void buscar_pokemon(Lista *pokedex)
 	}
 
 	struct pokemon buscado = { .nombre = nombre };
-	struct pokemon *encontrado = lista_buscar_elemento(
+	struct pokemon *encontrado = list_search(
 		pokedex, &buscado, comparar_nombre_pokemon);
 	print_pokemon(encontrado, NULL);
 }

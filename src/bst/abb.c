@@ -38,7 +38,7 @@ static nodo_t *nodo_buscar(nodo_t *nodo, void *elemento,
 	}
 }
 
-static nodo_t *nodo_insertar(abb_t *abb, nodo_t *nodo, void *elemento)
+static nodo_t *nodo_insertar(BST *abb, nodo_t *nodo, void *elemento)
 {
 	if (!nodo) {
 		nodo_t *nuevo = nodo_crear(elemento);
@@ -66,7 +66,7 @@ static nodo_t *nodo_quitar_un_hijo(nodo_t *nodo)
 	return temp;
 }
 
-static nodo_t *nodo_quitar(abb_t *abb, nodo_t *node, void *data, bool *is_removed, void **found)
+static nodo_t *nodo_quitar(BST *abb, nodo_t *node, void *data, bool *is_removed, void **found)
 {
 	if (!node || !abb->comparador) {
 		*is_removed = false;
@@ -106,7 +106,7 @@ static nodo_t *nodo_quitar(abb_t *abb, nodo_t *node, void *data, bool *is_remove
 }
 
 // ----- FUNCIONES DEL ABB -----
-bool abb_insertar(abb_t *abb, void *elemento)
+bool bst_insert(BST *abb, void *elemento)
 {
 	if (!abb)
 		return false;
@@ -117,7 +117,7 @@ bool abb_insertar(abb_t *abb, void *elemento)
 	return abb->nodos > nodos_iniciales;
 }
 
-bool abb_quitar(abb_t *abb, void *buscado, void **encontrado)
+bool bst_remove(BST *abb, void *buscado, void **encontrado)
 {
 	if (!abb) {
 		return false;
@@ -130,7 +130,7 @@ bool abb_quitar(abb_t *abb, void *buscado, void **encontrado)
 	return removido;
 }
 
-void *abb_obtener(abb_t *abb, void *elemento)
+void *bst_get(BST *abb, void *elemento)
 {
 	if (!abb || !elemento)
 		return NULL;
@@ -138,7 +138,7 @@ void *abb_obtener(abb_t *abb, void *elemento)
 	return nodo ? nodo->elemento : NULL;
 }
 
-size_t abb_cantidad(abb_t *abb)
+size_t bst_size(BST *abb)
 {
 	return abb ? abb->nodos : 0;
 }

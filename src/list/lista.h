@@ -4,22 +4,22 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef struct lista Lista;
+typedef struct list List;
 typedef struct lista_iterador Lista_iterador;
 
-Lista *lista_crear();
-void lista_destruir(Lista *);
+List *list_new();
+void list_destroy(List *);
 
 /**
  * Destruye la lista aplicando la funcion destructora (si no es NULL) a cada elemento.
  * */
-void lista_destruir_todo(Lista *, void (*destructor)(void *));
+void list_destroy_all(List *, void (*destructor)(void *));
 
 /*
  * Devuelve la cantidad de elementos de la lista.
  * Una lista NULL tiene 0 elementos.
  */
-size_t lista_cantidad_elementos(Lista *);
+size_t list_size(List *);
 
 /**
  * Inserta un elemento en la lista en la posicion dada.
@@ -29,12 +29,12 @@ size_t lista_cantidad_elementos(Lista *);
  * Devuelve true si pudo, false en caso de error.
  *
  */
-bool lista_agregar_elemento(Lista *list, size_t posicion, void *cosa);
+bool list_insert(List *list, size_t posicion, void *cosa);
 
 /**
   * Inserta un elemento al final de la lista.
   */
-bool lista_agregar_al_final(Lista *list, void *cosa);
+bool list_append(List *list, void *cosa);
 
 /**
  * Elimina un elemento de la posicion dada.
@@ -43,7 +43,7 @@ bool lista_agregar_al_final(Lista *list, void *cosa);
  *
  * En caso de error devuelve false, caso contrario true.
  */
-bool lista_quitar_elemento(Lista *list, size_t posicion,
+bool list_remove(List *list, size_t posicion,
 			   void **elemento_quitado);
 
 /**
@@ -53,7 +53,7 @@ bool lista_quitar_elemento(Lista *list, size_t posicion,
  *
  * En caso de no encontrarlo devuelve NULL.
  */
-void *lista_buscar_elemento(Lista *list, void *buscado,
+void *list_search(List *list, void *buscado,
 			    int (*comparador)(void *, void *));
 
 /**
@@ -65,7 +65,7 @@ void *lista_buscar_elemento(Lista *list, void *buscado,
  *
  * Devuelve true si pudo obtener el elemento o false en caso de error.
  */
-bool lista_obtener_elemento(Lista *list, size_t posicion,
+bool list_get(List *list, size_t posicion,
 			    void **elemento_encontrado);
 
 /**
@@ -77,7 +77,7 @@ bool lista_obtener_elemento(Lista *list, size_t posicion,
  *
  * Devuelve la cantidad de elementos iterados.
  * */
-size_t lista_iterar_elementos(Lista *list, bool (*f)(void *, void *),
+size_t list_map(List *list, bool (*f)(void *, void *),
 			      void *ctx);
 
 /**
@@ -85,28 +85,28 @@ size_t lista_iterar_elementos(Lista *list, bool (*f)(void *, void *),
  *
  * En caso de error devuelve NULL
  */
-Lista_iterador *lista_iterador_crear(Lista *list);
+Lista_iterador *l_iter_new(List *list);
 
 /**
  * Devuelve true si hay siguiente.
  */
-bool lista_iterador_hay_siguiente(Lista_iterador *);
+bool l_iter_has_next(Lista_iterador *);
 
 /**
  *
  * Hace que el iterador avance al siguiente elemento de la lista.
  *
  */
-void lista_iterador_avanzar(Lista_iterador *);
+void l_iter_next(Lista_iterador *);
 
 /**
  * Devuelve el elemento iterado
  */
-void *lista_iterador_obtener_elemento_actual(Lista_iterador *);
+void *l_iter_get(Lista_iterador *);
 
 /**
  * Eso
  */
-void lista_iterador_destruir(Lista_iterador *);
+void l_iter_destroy(Lista_iterador *);
 
 #endif /* LISTA_H */

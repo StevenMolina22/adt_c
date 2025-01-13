@@ -244,247 +244,247 @@ void cola_esta_vacia_cola_nula_devuelve_true()
 // ----- TEST LISTA
 void lista_crear_no_nula()
 {
-	Lista *l = lista_crear();
+	List *l = list_new();
 
 	pa2m_afirmar(l != NULL, "La lista recién creada no debe ser nula.");
-	lista_destruir(l);
+	list_destroy(l);
 }
 
 void lista_tamano_cero_al_inicializar()
 {
-	Lista *l = lista_crear();
+	List *l = list_new();
 
-	pa2m_afirmar(lista_cantidad_elementos(l) == 0,
+	pa2m_afirmar(list_size(l) == 0,
 		     "La lista recién creada tiene tamaño cero.");
-	lista_destruir(l);
+	list_destroy(l);
 }
 
 void lista_agregar_elemento_incrementa_tamano()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor = 41;
-	lista_agregar_elemento(lista, 0, &valor);
+	list_insert(lista, 0, &valor);
 
 	pa2m_afirmar(true, "Se incrementa el tamaño.");
 	pa2m_afirmar(
-		lista_cantidad_elementos(lista) == 1,
+		list_size(lista) == 1,
 		"El tamaño de la lista debe ser 1 después de agregar un elemento.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_agregar_multiples_elementos_incrementa_tamano()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valores[] = { 10, 20, 30, 40, 50 };
 	size_t cantidad_valores = sizeof(valores) / sizeof(valores[0]);
 
 	for (size_t i = 0; i < cantidad_valores; i++) {
-		pa2m_afirmar(lista_agregar_elemento(lista, i, &valores[i]),
+		pa2m_afirmar(list_insert(lista, i, &valores[i]),
 			     "Se puede agregar el elemento %zu", i + 1);
 	}
 
 	pa2m_afirmar(
-		lista_cantidad_elementos(lista) == cantidad_valores,
+		list_size(lista) == cantidad_valores,
 		"El tamaño de la lista debe ser %zu después de agregar %zu elementos",
 		cantidad_valores, cantidad_valores);
 
 	// Verificar que los elementos se agregaron correctamente
 	for (size_t i = 0; i < cantidad_valores; i++) {
 		int *encontrado = NULL;
-		pa2m_afirmar(lista_obtener_elemento(lista, i,
+		pa2m_afirmar(list_get(lista, i,
 						    (void **)&encontrado),
 			     "Se puede obtener el elemento %zu", i + 1);
 		pa2m_afirmar(encontrado != NULL && *encontrado == valores[i],
 			     "El elemento %zu debe ser %d", i + 1, valores[i]);
 	}
 
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_eliminar_elemento_disminuye_tamano()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor = 42;
-	lista_agregar_elemento(lista, 0, &valor);
-	lista_quitar_elemento(lista, 0, NULL);
+	list_insert(lista, 0, &valor);
+	list_remove(lista, 0, NULL);
 	pa2m_afirmar(
-		lista_cantidad_elementos(lista) == 0,
+		list_size(lista) == 0,
 		"El tamaño de la lista debe ser 0 después de eliminar un elemento.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_buscar_elemento_devuelve_valor_correcto()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor = 42;
-	lista_agregar_elemento(lista, 0, &valor);
+	list_insert(lista, 0, &valor);
 	int *encontrado =
-		(int *)lista_buscar_elemento(lista, &valor, comparar_enteros);
+		(int *)list_search(lista, &valor, comparar_enteros);
 	pa2m_afirmar(encontrado != NULL && *encontrado == valor,
 		     "La búsqueda debe devolver el elemento correcto.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_obtener_elemento_devuelve_valor_correcto()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor = 42;
-	lista_agregar_elemento(lista, 0, &valor);
+	list_insert(lista, 0, &valor);
 	int *encontrado = NULL;
-	lista_obtener_elemento(lista, 0, (void **)&encontrado);
+	list_get(lista, 0, (void **)&encontrado);
 	pa2m_afirmar(encontrado != NULL && *encontrado == valor,
 		     "El elemento obtenido debe ser el correcto.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_iterar_elementos_llama_funcion()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor1 = 42;
 	int valor2 = 84;
-	lista_agregar_elemento(lista, 0, &valor1);
-	lista_agregar_elemento(lista, 1, &valor2);
+	list_insert(lista, 0, &valor1);
+	list_insert(lista, 1, &valor2);
 
 	int contador = 0;
 	size_t iterados =
-		lista_iterar_elementos(lista, contar_elementos, &contador);
+		list_map(lista, contar_elementos, &contador);
 	pa2m_afirmar(iterados == 2, "Se deben iterar 2 elementos.");
 	pa2m_afirmar(contador == 2, "Se deben contar 2 elementos.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 // Casos borde para lista
 void lista_agregar_elemento_a_lista_null_falla()
 {
-	Lista *lista = NULL;
+	List *lista = NULL;
 	int valor = 42;
-	pa2m_afirmar(lista_agregar_elemento(lista, 0, &valor) == false,
+	pa2m_afirmar(list_insert(lista, 0, &valor) == false,
 		     "Agregar un elemento a una lista NULL debe fallar.");
 }
 
 void lista_agregar_elemento_en_posicion_invalida_falla()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor = 42;
 	pa2m_afirmar(
-		lista_agregar_elemento(lista, 1, &valor) == false,
+		list_insert(lista, 1, &valor) == false,
 		"Agregar un elemento en una posición inválida debe fallar.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_remover_elemento_de_lista_vacia_falla()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	void *removido = NULL;
-	pa2m_afirmar(lista_quitar_elemento(lista, 0, &removido) == false,
+	pa2m_afirmar(list_remove(lista, 0, &removido) == false,
 		     "Remover un elemento de una lista vacía debe fallar.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_remover_elemento_en_posicion_invalida_falla()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor = 42;
-	lista_agregar_elemento(lista, 0, &valor);
+	list_insert(lista, 0, &valor);
 	void *removido = NULL;
 	pa2m_afirmar(
-		lista_quitar_elemento(lista, 1, &removido) == false,
+		list_remove(lista, 1, &removido) == false,
 		"Remover un elemento de una posición inválida debe fallar.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_buscar_elemento_en_lista_vacia_devuelve_null()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor = 42;
-	pa2m_afirmar(lista_buscar_elemento(lista, &valor, comparar_enteros) ==
+	pa2m_afirmar(list_search(lista, &valor, comparar_enteros) ==
 			     NULL,
 		     "Buscar en una lista vacía debe devolver NULL.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_obtener_elemento_en_posicion_invalida_falla()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor = 42;
-	lista_agregar_elemento(lista, 0, &valor);
+	list_insert(lista, 0, &valor);
 	void *encontrado = NULL;
 	pa2m_afirmar(
-		lista_obtener_elemento(lista, 1, &encontrado) == false,
+		list_get(lista, 1, &encontrado) == false,
 		"Obtener un elemento de una posición inválida debe fallar.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_iterar_lista_vacia_devuelve_cero()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int contador = 0;
 	size_t iterados =
-		lista_iterar_elementos(lista, contar_elementos, &contador);
+		list_map(lista, contar_elementos, &contador);
 	pa2m_afirmar(iterados == 0, "Iterar una lista vacía debe devolver 0.");
 	pa2m_afirmar(contador == 0,
 		     "No se deben contar elementos en una lista vacía.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_iterar_elementos_en_lista_vacia_devuelve_cero()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int contador = 0;
 	size_t iterados =
-		lista_iterar_elementos(lista, contar_elementos, &contador);
+		list_map(lista, contar_elementos, &contador);
 	pa2m_afirmar(iterados == 0, "Iterar una lista vacía debe devolver 0.");
 	pa2m_afirmar(contador == 0,
 		     "No se deben contar elementos en una lista vacía.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_iterar_elementos_con_un_solo_elemento()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor = 42;
-	lista_agregar_elemento(lista, 0, &valor);
+	list_insert(lista, 0, &valor);
 	int contador = 0;
 	size_t iterados =
-		lista_iterar_elementos(lista, contar_elementos, &contador);
+		list_map(lista, contar_elementos, &contador);
 	pa2m_afirmar(iterados == 1,
 		     "Iterar una lista con un solo elemento debe devolver 1.");
 	pa2m_afirmar(
 		contador == 1,
 		"Se debe contar un elemento en una lista con un solo elemento.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_iterar_elementos_con_multiples_elementos()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valor1 = 42, valor2 = 43, valor3 = 44;
-	lista_agregar_elemento(lista, 0, &valor1);
-	lista_agregar_elemento(lista, 1, &valor2);
-	lista_agregar_elemento(lista, 2, &valor3);
+	list_insert(lista, 0, &valor1);
+	list_insert(lista, 1, &valor2);
+	list_insert(lista, 2, &valor3);
 
 	int contador = 0;
 	size_t iterados =
-		lista_iterar_elementos(lista, contar_elementos, &contador);
+		list_map(lista, contar_elementos, &contador);
 	pa2m_afirmar(
 		iterados == 3,
 		"Iterar una lista con múltiples elementos debe devolver 3.");
 	pa2m_afirmar(
 		contador == 3,
 		"Se deben contar tres elementos en una lista con múltiples elementos.");
-	lista_destruir(lista);
+	list_destroy(lista);
 }
 
 void lista_destruir_lista_null_no_causa_falla()
 {
-	Lista *lista = NULL;
-	lista_destruir(lista);
+	List *lista = NULL;
+	list_destroy(lista);
 	pa2m_afirmar(true, "Destruir una lista NULL no debe causar un crash.");
 }
 
 void lista_destruir_todos_lista_null_no_causa_falla()
 {
-	Lista *lista = NULL;
-	lista_destruir_todo(lista, free);
+	List *lista = NULL;
+	list_destroy_all(lista, free);
 	pa2m_afirmar(
 		true,
 		"Destruir todos los elementos de una lista NULL no debe causar un crash.");
@@ -493,130 +493,130 @@ void lista_destruir_todos_lista_null_no_causa_falla()
 // ----- TEST ITERADOR LISTA
 void iterador_lista_crear_no_null()
 {
-	Lista *lista = lista_crear();
-	Lista_iterador *iter = lista_iterador_crear(lista);
+	List *lista = list_new();
+	Lista_iterador *iter = l_iter_new(lista);
 	pa2m_afirmar(iter != NULL, "El iterador creado no debe ser NULL");
-	lista_iterador_destruir(iter);
-	lista_destruir(lista);
+	l_iter_destroy(iter);
+	list_destroy(lista);
 }
 
 void iterador_lista_crear_lista_null_devuelve_null()
 {
-	Lista_iterador *iter = lista_iterador_crear(NULL);
+	Lista_iterador *iter = l_iter_new(NULL);
 	pa2m_afirmar(iter == NULL,
 		     "Crear un iterador con una lista NULL debe devolver NULL");
 }
 
 void iterador_lista_hay_siguiente_lista_vacia()
 {
-	Lista *lista = lista_crear();
-	Lista_iterador *iter = lista_iterador_crear(lista);
-	pa2m_afirmar(!lista_iterador_hay_siguiente(iter),
+	List *lista = list_new();
+	Lista_iterador *iter = l_iter_new(lista);
+	pa2m_afirmar(!l_iter_has_next(iter),
 		     "Una lista vacía no debe tener siguiente elemento");
-	lista_iterador_destruir(iter);
-	lista_destruir(lista);
+	l_iter_destroy(iter);
+	list_destroy(lista);
 }
 
 void iterador_lista_hay_siguiente_multiples_elementos()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valores[] = { 1, 2, 3 };
 	for (size_t i = 0; i < 3; i++) {
-		lista_agregar_elemento(lista, i, &valores[i]);
+		list_insert(lista, i, &valores[i]);
 	}
-	Lista_iterador *iter = lista_iterador_crear(lista);
-	pa2m_afirmar(lista_iterador_hay_siguiente(iter),
+	Lista_iterador *iter = l_iter_new(lista);
+	pa2m_afirmar(l_iter_has_next(iter),
 		     "Una lista con múltiples elementos debe tener siguiente");
-	lista_iterador_destruir(iter);
-	lista_destruir(lista);
+	l_iter_destroy(iter);
+	list_destroy(lista);
 }
 
 void iterador_lista_avanzar_correctamente()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valores[] = { 1, 2, 3 };
 	for (size_t i = 0; i < 3; i++) {
-		lista_agregar_elemento(lista, i, &valores[i]);
+		list_insert(lista, i, &valores[i]);
 	}
-	Lista_iterador *iter = lista_iterador_crear(lista);
+	Lista_iterador *iter = l_iter_new(lista);
 
-	int *actual = lista_iterador_obtener_elemento_actual(iter);
+	int *actual = l_iter_get(iter);
 	pa2m_afirmar(actual != NULL && *actual == 1,
 		     "El primer elemento debe ser 1");
 
-	lista_iterador_avanzar(iter);
-	actual = lista_iterador_obtener_elemento_actual(iter);
+	l_iter_next(iter);
+	actual = l_iter_get(iter);
 	pa2m_afirmar(actual != NULL && *actual == 2,
 		     "El segundo elemento debe ser 2");
 
-	lista_iterador_avanzar(iter);
-	actual = lista_iterador_obtener_elemento_actual(iter);
+	l_iter_next(iter);
+	actual = l_iter_get(iter);
 	pa2m_afirmar(actual != NULL && *actual == 3,
 		     "El tercer elemento debe ser 3");
 
-	lista_iterador_avanzar(iter);
-	actual = lista_iterador_obtener_elemento_actual(iter);
+	l_iter_next(iter);
+	actual = l_iter_get(iter);
 	pa2m_afirmar(
 		actual == NULL,
 		"Después del último elemento, obtener_elemento_actual debe devolver NULL");
 
-	lista_iterador_destruir(iter);
-	lista_destruir(lista);
+	l_iter_destroy(iter);
+	list_destroy(lista);
 }
 
 void iterador_lista_obtener_elemento_actual_iterador_null()
 {
 	pa2m_afirmar(
-		lista_iterador_obtener_elemento_actual(NULL) == NULL,
+		l_iter_get(NULL) == NULL,
 		"obtener_elemento_actual con iterador NULL debe devolver NULL");
 }
 
 // Casos border iterador de lista
 void iterador_lista_obtener_elemento_actual_iterador_vacio()
 {
-	Lista *lista = lista_crear();
-	Lista_iterador *iter = lista_iterador_crear(lista);
-	void *actual = lista_iterador_obtener_elemento_actual(iter);
+	List *lista = list_new();
+	Lista_iterador *iter = l_iter_new(lista);
+	void *actual = l_iter_get(iter);
 	pa2m_afirmar(
 		actual == NULL,
 		"El elemento actual de un iterador de lista vacío debe ser NULL");
-	lista_iterador_destruir(iter);
-	lista_destruir(lista);
+	l_iter_destroy(iter);
+	list_destroy(lista);
 }
 
 void iterador_lista_avanzar_iterador_vacio()
 {
-	Lista *lista = lista_crear();
-	Lista_iterador *iter = lista_iterador_crear(lista);
-	lista_iterador_avanzar(iter);
+	List *lista = list_new();
+	Lista_iterador *iter = l_iter_new(lista);
+	l_iter_next(iter);
 	pa2m_afirmar(
-		lista_iterador_obtener_elemento_actual(iter) == NULL,
+		l_iter_get(iter) == NULL,
 		"Avanzar un iterador de lista vacío no debe cambiar el elemento actual");
-	lista_iterador_destruir(iter);
-	lista_destruir(lista);
+	l_iter_destroy(iter);
+	list_destroy(lista);
 }
 
 void iterador_lista_hay_siguiente_iterador_null()
 {
 	pa2m_afirmar(
-		!lista_iterador_hay_siguiente(NULL),
+		!l_iter_has_next(NULL),
 		"Un iterador NULL debe indicar que no hay siguiente elemento");
 }
 
 void iterador_lista_hay_siguiente_despues_de_avanzar()
 {
-	Lista *lista = lista_crear();
+	List *lista = list_new();
 	int valores[] = { 1, 2 };
 	for (size_t i = 0; i < 2; i++) {
-		lista_agregar_elemento(lista, i, &valores[i]);
+		list_insert(lista, i, &valores[i]);
 	}
-	Lista_iterador *iter = lista_iterador_crear(lista);
-	lista_iterador_avanzar(iter);
+	Lista_iterador *iter = l_iter_new(lista);
+	l_iter_next(iter);
 	pa2m_afirmar(
-		lista_iterador_hay_siguiente(iter),
+		l_iter_has_next(iter),
 		"Después de avanzar, el iterador debe tener siguiente elemento");
-	lista_iterador_destruir(iter);
-	lista_destruir(lista);
+	l_iter_destroy(iter);
+	list_destroy(lista);
 }
 
 //
@@ -625,7 +625,7 @@ void iterador_lista_hay_siguiente_despues_de_avanzar()
 // ----- MAIN -----
 int main()
 {
-	pa2m_nuevo_grupo("============== Pruebas de Lista ===============");
+	pa2m_nuevo_grupo("============== Pruebas de List ===============");
 	lista_crear_no_nula();
 	lista_tamano_cero_al_inicializar();
 	lista_agregar_elemento_incrementa_tamano();
@@ -649,7 +649,7 @@ int main()
 	lista_destruir_todos_lista_null_no_causa_falla();
 
 	pa2m_nuevo_grupo(
-		"============== Pruebas de Iterador de Lista ===============");
+		"============== Pruebas de Iterador de List ===============");
 	iterador_lista_crear_no_null();
 	iterador_lista_crear_lista_null_devuelve_null();
 	iterador_lista_hay_siguiente_lista_vacia();

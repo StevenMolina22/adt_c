@@ -13,7 +13,7 @@ typedef struct nodo {
 	struct nodo *der;
 } nodo_t;
 
-struct abb {
+struct bst {
 	size_t nodos;
 	nodo_t *raiz;
 	int (*comparador)(void *, void *);

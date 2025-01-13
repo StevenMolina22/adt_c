@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 	}
 
 	// ----- CREAR POKEDEX -----
-	abb_t *pokedex = abb_crear(comparar_nombre_pokemon);
+	BST *pokedex = bst_new(comparar_nombre_pokemon);
 	if (!pokedex) {
 		printf("Error al crear el ABB\n");
 		cerrar_archivo_csv(archivo);
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	// ----- ANADIR A POKEDEX -----
 	if (!agregar_pokemones(archivo, pokedex)) {
 		cerrar_archivo_csv(archivo);
-		abb_destruir_todo(pokedex, liberar_pokemon);
+		bst_destroy_all(pokedex, liberar_pokemon);
 		return ERROR;
 	}
 	cerrar_archivo_csv(archivo);
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 	// ----- OPCION USUARIO -----
 	int opcion = obtener_opcion_usuario();
 	if (opcion == ERROR) {
-		abb_destruir_todo(pokedex, liberar_pokemon);
+		bst_destroy_all(pokedex, liberar_pokemon);
 		return ERROR;
 	}
 
@@ -62,14 +62,14 @@ int main(int argc, char *argv[])
 		buscar_pokemon(pokedex);
 		break;
 	case 2:
-		abb_iterar_inorden(pokedex, print_pokemon, NULL);
+		bst_map_inorder(pokedex, print_pokemon, NULL);
 		break;
 	default:
 		printf("Opcion invalida\n");
-		abb_destruir_todo(pokedex, liberar_pokemon);
+		bst_destroy_all(pokedex, liberar_pokemon);
 		return ERROR;
 	}
 
-	abb_destruir_todo(pokedex, liberar_pokemon);
+	bst_destroy_all(pokedex, liberar_pokemon);
 	return 0;
 }

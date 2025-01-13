@@ -19,10 +19,10 @@ struct pokemon {
 };
 
 struct pokemon *leer_pokemon(struct archivo_csv *archivo);
-bool agregar_pokemones(struct archivo_csv *archivo, Lista *pokedex);
+bool agregar_pokemones(struct archivo_csv *archivo, List *pokedex);
 void liberar_pokemon(void *pokemon);
 int comparar_nombre_pokemon(void *pokemon1, void *pokemon2);
 bool print_pokemon(void *pokemon, void *ctx);
-void buscar_pokemon(Lista *pokedex);
+void buscar_pokemon(List *pokedex);
 
 #endif // POKEMON_H

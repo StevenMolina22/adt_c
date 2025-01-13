@@ -12,18 +12,18 @@ static void nodo_destruir_todo(nodo_t *nodo, void (*destructor)(void *))
 	free(nodo);
 }
 
-abb_t *abb_crear(int (*comparador)(void *, void *))
+BST *bst_new(int (*comparador)(void *, void *))
 {
 	if (!comparador)
 		return NULL;
-	abb_t *abb = calloc(sizeof(abb_t), 1);
+	BST *abb = calloc(sizeof(BST), 1);
 	if (!abb)
 		return NULL;
 	abb->comparador = comparador;
 	return abb;
 }
 
-void abb_destruir(abb_t *abb)
+void bst_destroy(BST *abb)
 {
 	if (!abb)
 		return;
@@ -31,7 +31,7 @@ void abb_destruir(abb_t *abb)
 	free(abb);
 }
 
-void abb_destruir_todo(abb_t *abb, void (*destructor)(void *))
+void bst_destroy_all(BST *abb, void (*destructor)(void *))
 {
 	if (!abb)
 		return;

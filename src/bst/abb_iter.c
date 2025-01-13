@@ -53,7 +53,7 @@ static size_t nodo_iterar_postorden(nodo_t *nodo, bool (*f)(void *, void *),
 	return contador;
 }
 
-size_t abb_iterar_inorden(abb_t *abb, bool (*f)(void *, void *), void *ctx)
+size_t bst_map_inorder(BST *abb, bool (*f)(void *, void *), void *ctx)
 {
 	if (!abb || !f)
 		return 0;
@@ -61,7 +61,7 @@ size_t abb_iterar_inorden(abb_t *abb, bool (*f)(void *, void *), void *ctx)
 	return nodo_iterar_inorden(abb->raiz, f, ctx, &seguir_iterando);
 }
 
-size_t abb_iterar_preorden(abb_t *abb, bool (*f)(void *, void *), void *ctx)
+size_t bst_map_preorder(BST *abb, bool (*f)(void *, void *), void *ctx)
 {
 	if (!abb || !f)
 		return 0;
@@ -69,7 +69,7 @@ size_t abb_iterar_preorden(abb_t *abb, bool (*f)(void *, void *), void *ctx)
 	return nodo_iterar_preorden(abb->raiz, f, ctx, &seguir_iterando);
 }
 
-size_t abb_iterar_postorden(abb_t *abb, bool (*f)(void *, void *), void *ctx)
+size_t bst_map_postorder(BST *abb, bool (*f)(void *, void *), void *ctx)
 {
 	if (!abb || !f)
 		return 0;

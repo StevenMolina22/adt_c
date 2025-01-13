@@ -6,7 +6,7 @@ typedef struct Nodo {
 	struct Nodo *siguiente;
 } Node;
 
-struct lista {
+struct list {
 	size_t cantidad;
 	Node *frente;
 	Node *fondo;
@@ -16,9 +16,9 @@ struct lista_iterador {
 	Node *actual;
 };
 
-Lista *lista_crear()
+List *list_new()
 {
-	Lista *lista = malloc(sizeof(Lista));
+	List *lista = malloc(sizeof(List));
 	if (!lista)
 		return NULL;
 	lista->cantidad = 0;
@@ -27,7 +27,7 @@ Lista *lista_crear()
 	return lista;
 }
 
-void lista_destruir(Lista *lista)
+void list_destroy(List *lista)
 {
 	if (!lista)
 		return;
@@ -40,7 +40,7 @@ void lista_destruir(Lista *lista)
 	free(lista);
 }
 
-void lista_destruir_todo(Lista *lista, void (*destructor)(void *))
+void list_destroy_all(List *lista, void (*destructor)(void *))
 {
 	if (!lista)
 		return;
@@ -55,14 +55,14 @@ void lista_destruir_todo(Lista *lista, void (*destructor)(void *))
 	free(lista);
 }
 
-size_t lista_cantidad_elementos(Lista *lista)
+size_t list_size(List *lista)
 {
 	if (!lista)
 		return 0;
 	return lista->cantidad;
 }
 
-bool lista_agregar_elemento(Lista *lista, size_t idx, void *data)
+bool list_insert(List *lista, size_t idx, void *data)
 {
 	// Invalido
 	if (!lista || idx > lista->cantidad)
@@ -93,7 +93,7 @@ bool lista_agregar_elemento(Lista *lista, size_t idx, void *data)
 	return true;
 }
 
-bool lista_agregar_al_final(Lista *lista, void *item)
+bool list_append(List *lista, void *item)
 {
 	if (!lista)
 		return false;
@@ -115,7 +115,7 @@ bool lista_agregar_al_final(Lista *lista, void *item)
 }
 
 // Helper function for removal funcs
-bool remover_nodo(Lista *lista, Node *nodo, void **removido)
+bool remover_nodo(List *lista, Node *nodo, void **removido)
 {
 	if (removido) {
 		*removido = nodo->data;
@@ -127,7 +127,7 @@ bool remover_nodo(Lista *lista, Node *nodo, void **removido)
 
 // ----- Funciones auxiliares para remover -----
 // Funcion auxiliar
-bool remover_frente(Lista *lista, void **removido)
+bool remover_frente(List *lista, void **removido)
 {
 	Node *nodo = lista->frente;
 	lista->frente = nodo->siguiente;
@@ -138,7 +138,7 @@ bool remover_frente(Lista *lista, void **removido)
 }
 
 // Funcion auxiliar
-bool remover_fondo(Lista *lista, void **removido)
+bool remover_fondo(List *lista, void **removido)
 {
 	Node *nodo = lista->fondo;
 	Node *previo = lista->frente;
@@ -151,7 +151,7 @@ bool remover_fondo(Lista *lista, void **removido)
 }
 
 // Funcion auxiliar
-bool remover_mitad(Lista *lista, size_t idx, void **removido)
+bool remover_mitad(List *lista, size_t idx, void **removido)
 {
 	Node *previo = lista->frente;
 	for (size_t i = 0; i < idx - 1; i++) {
@@ -166,7 +166,7 @@ bool remover_mitad(Lista *lista, size_t idx, void **removido)
 }
 
 // Remover principal
-bool lista_quitar_elemento(Lista *lista, size_t idx, void **removido)
+bool list_remove(List *lista, size_t idx, void **removido)
 {
 	if (!lista || idx >= lista->cantidad)
 		return false;
@@ -180,7 +180,7 @@ bool lista_quitar_elemento(Lista *lista, size_t idx, void **removido)
 	}
 }
 
-void *lista_buscar_elemento(Lista *lista, void *target,
+void *list_search(List *lista, void *target,
 			    int (*cmp)(void *, void *))
 {
 	if (!lista || !cmp)
@@ -194,7 +194,7 @@ void *lista_buscar_elemento(Lista *lista, void *target,
 	return NULL;
 }
 
-bool lista_obtener_elemento(Lista *lista, size_t idx, void **encontrado)
+bool list_get(List *lista, size_t idx, void **encontrado)
 {
 	if (!lista || idx >= lista->cantidad)
 		return false;
@@ -209,7 +209,7 @@ bool lista_obtener_elemento(Lista *lista, size_t idx, void **encontrado)
 	return true;
 }
 
-size_t lista_iterar_elementos(Lista *lista, bool (*f)(void *, void *),
+size_t list_map(List *lista, bool (*f)(void *, void *),
 			      void *ctx)
 {
 	if (!lista)
@@ -225,7 +225,7 @@ size_t lista_iterar_elementos(Lista *lista, bool (*f)(void *, void *),
 	return i;
 }
 
-Lista_iterador *lista_iterador_crear(Lista *lista)
+Lista_iterador *l_iter_new(List *lista)
 {
 	if (!lista)
 		return NULL;
@@ -235,28 +235,28 @@ Lista_iterador *lista_iterador_crear(Lista *lista)
 	return iter;
 }
 
-bool lista_iterador_hay_siguiente(Lista_iterador *iter)
+bool l_iter_has_next(Lista_iterador *iter)
 {
 	if (!iter || !iter->actual)
 		return false;
 	return true;
 }
 
-void lista_iterador_avanzar(Lista_iterador *iter)
+void l_iter_next(Lista_iterador *iter)
 {
 	if (!iter || !iter->actual)
 		return;
 	iter->actual = iter->actual->siguiente;
 }
 
-void *lista_iterador_obtener_elemento_actual(Lista_iterador *iter)
+void *l_iter_get(Lista_iterador *iter)
 {
 	if (!iter || !iter->actual)
 		return NULL;
 	return iter->actual->data;
 }
 
-void lista_iterador_destruir(Lista_iterador *iter)
+void l_iter_destroy(Lista_iterador *iter)
 {
 	free(iter);
 }
