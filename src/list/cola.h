@@ -5,17 +5,17 @@
 #include <stdbool.h>
 #include "lista.h"
 
-typedef struct cola Cola;
+typedef struct cola Queue;
 
-Cola *cola_crear();
-void cola_destruir(Cola *);
-void cola_destruir_todo(Cola *, void (*f)(void *));
+Queue *queue_new();
+void queue_destroy(Queue *);
+void queue_destroy_all(Queue *, void (*f)(void *));
 
 // cada una de estas funciones es O(1)
-size_t cola_cantidad(Cola *);
-void *cola_frente(Cola *);
-bool cola_encolar(Cola *, void *);
-void *cola_desencolar(Cola *);
-bool cola_esta_vacía(Cola *);
+size_t queue_size(Queue *);
+void *queue_peek(Queue *);
+bool queue_enqueue(Queue *, void *);
+void *queue_dequeue(Queue *);
+bool queue_is_empty(Queue *);
 
 #endif // COLA_H_

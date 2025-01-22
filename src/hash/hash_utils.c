@@ -39,7 +39,7 @@ void nodo_destruir(nodo_t *nodo)
 	free(nodo);
 }
 
-nodo_t *encontrar_nodo(hash_t *hash, char *clave)
+nodo_t *encontrar_nodo(Hash *hash, char *clave)
 {
 	size_t idx = hasher(clave) % hash->cap;
 	nodo_t *actual = hash->tabla[idx];
@@ -52,7 +52,7 @@ nodo_t *encontrar_nodo(hash_t *hash, char *clave)
 	return NULL;
 }
 
-bool agregar_entrada(hash_t *hash, char *clave, void *valor)
+bool agregar_entrada(Hash *hash, char *clave, void *valor)
 {
 	size_t idx = hasher(clave) % hash->cap;
 	nodo_t *nuevo = nodo_crear(clave, valor);
@@ -67,7 +67,7 @@ bool agregar_entrada(hash_t *hash, char *clave, void *valor)
 	return true;
 }
 
-bool hash_rehash(hash_t *hash)
+bool hash_rehash(Hash *hash)
 {
 	hash->cap *= 2;
 	nodo_t **tabla_vieja = hash->tabla;

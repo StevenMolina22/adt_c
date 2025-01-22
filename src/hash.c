@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 		return ERROR;
 	}
 
-	hash_t *pokedex = hash_crear(20);
+	Hash *pokedex = hash_new(20);
 	if (!pokedex) {
 		printf("Error al crear la pokedex\n");
 		cerrar_archivo_csv(archivo);
@@ -43,14 +43,14 @@ int main(int argc, char *argv[])
 
 	if (!agregar_pokemones(archivo, pokedex)) {
 		cerrar_archivo_csv(archivo);
-		hash_destruir_todo(pokedex, liberar_pokemon);
+		hash_destroy_all(pokedex, liberar_pokemon);
 		return ERROR;
 	}
 	cerrar_archivo_csv(archivo);
 
 	int opcion = obtener_opcion_usuario();
 	if (opcion == ERROR) {
-		hash_destruir_todo(pokedex, liberar_pokemon);
+		hash_destroy_all(pokedex, liberar_pokemon);
 		return ERROR;
 	}
 
@@ -59,14 +59,14 @@ int main(int argc, char *argv[])
 		buscar_pokemon(pokedex);
 		break;
 	case 2:
-		hash_iterar(pokedex, print_pokemon, NULL);
+		hash_map(pokedex, print_pokemon, NULL);
 		break;
 	default:
 		printf("Opcion invalida\n");
-		hash_destruir_todo(pokedex, liberar_pokemon);
+		hash_destroy_all(pokedex, liberar_pokemon);
 		return ERROR;
 	}
 
-	hash_destruir_todo(pokedex, liberar_pokemon);
+	hash_destroy_all(pokedex, liberar_pokemon);
 	return 0;
 }

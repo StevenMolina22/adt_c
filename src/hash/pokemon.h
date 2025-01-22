@@ -18,10 +18,10 @@ typedef struct pokemon {
 } Pokemon;
 
 struct pokemon *leer_pokemon(struct archivo_csv *archivo);
-bool agregar_pokemones(struct archivo_csv *archivo, hash_t *pokedex);
+bool agregar_pokemones(struct archivo_csv *archivo, Hash *pokedex);
 void liberar_pokemon(void *pokemon);
 int comparar_nombre_pokemon(void *pokemon1, void *pokemon2);
 bool print_pokemon(char *pokemon_name, void *pokemon, void *ctx);
-void buscar_pokemon(hash_t *pokedex);
+void buscar_pokemon(Hash *pokedex);
 
 #endif // POKEMON_H
